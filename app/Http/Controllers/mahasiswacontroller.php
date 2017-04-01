@@ -10,6 +10,13 @@ use App\mahasiswa;
 
 class mahasiswacontroller extends Controller
 {
+    public function mahasiswa()
+    {
+        $mahasiswa = mahasiswa::find(1);
+        echo "Nama : ".$mahasiswa->nama;
+        echo "<br>";
+        echo "Username : ".$mahasiswa->pengguna->username;
+    }
     public function awal()
     {
     	return "Hello dari mahasiswa controller";
