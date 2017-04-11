@@ -10,3 +10,4 @@
 		{!! Form::text('keterangan',null,['class'=>'form-control','placeholder'=>"Keterangan"]) !!}
 	</div>	
 </div>
+
