@@ -10,9 +10,17 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+  //  return view ('welcome');
+//});
+
+
+//Route::get('/{id}',function(){
+//	return \App\dosen_matakuliah::whereHas('matakuliah', function($q, $id)
+//	{
+//		$q->where('keterangan',$id);
+//	})->with('matakuliah')->get();
+//});
 
 Route::get('hello-world', function () {
     return "Hello-world";
@@ -20,14 +28,34 @@ Route::get('hello-world', function () {
 
 Route::get('mahasiswa_pengguna','MahasiswaController@mahasiswa');
 
+Route::get('ujiHas','RelationRebornController@ujiHas');
 
-// Route::get('pengguna/{pengguna}', function ($pengguna) {
-   // return "Hello-world dari pengguna $pengguna";
-// });
+Route::get('ujiDoesntHave','RelationRebornController@ujiDoesntHave');
 
-// Route::get('kelas_b/framework/{mhs?}', function ($mhs="Anonim") {
-    // return "Selamat datang $mhs";
-//});
+Route::get('wherehas',function()
+ 	{
+    return \App\Dosen_matakuliah::whereHas('dosen',function($query)
+    {
+    	$query->where('nama','like','%a%');
+    })
+->orWhereHas('matakuliah',function ($query)
+{
+	$query->where('title','like','%a%');
+})
+->with('dosen','matakuliah')
+->groupBy('dosen_id')
+->get();
+});
+
+Route::auth();
+
+Route::get('/login','SesiController@form');
+Route::post('/login','SesiController@validasi');
+Route::get('/logout','SesiController@logout');
+Route::get('/','SesiController@index');
+
+Route::group(['middleware'=>'AutentifikasiUser'],function()
+{
 
 Route::get('pengguna','PenggunaController@awal');
 Route::get('pengguna/tambah','PenggunaController@tambah');
@@ -84,3 +112,27 @@ Route::get('jadwal_matakuliah/{jadwal_matakuliah}', 'Jadwal_matakuliahController
 Route::get('jadwal_matakuliah/edit/{jadwal_matakuliah}', 'Jadwal_matakuliahController@edit');
 Route::post('jadwal_matakuliah/edit/{jadwal_matakuliah}', 'Jadwal_matakuliahController@update');
 Route::get('jadwal_matakuliah/hapus/{jadwal_matakuliah}', 'Jadwal_matakuliahController@hapus');
+
+});
+
+
+// Route::get('/', function (Illuminate\Http\Request $request)
+// {
+//     echo "ini adalah request dari method get ". $request->nama;
+// });
+
+// use Illuminate\Http\Request;
+// Route::get('/', function ()
+// {
+//     echo Form::open(['url'=>'/']).
+//     Form::label('nama ').
+//     Form::text('nama',null).
+//     Form::submit('kirim').
+//     Form::close();
+// });
+
+// Route::post('/', function (Request $request)
+// {
+// 	echo "Hasil dari form input tadi nama : ".$request->nama;
+//});
+
